@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} {{ page_name }} {% endblock %}
+
+{% block content %}
+
+<div class="top-bar">
+  <div class="top-bar-left">
+    <ul class="dropdown menu" data-dropdown-menu>
+      <li class="menu-text">Bit Clicker</li>
+    </ul>
+  </div>
+  <div class="top-bar-right">
+    <ul class="menu">
+      {% if user.is_authenticated %}
+      <li>Logged in as {{ user.username }}</li>
+      <li><a href="/logout">Log Out</a></li>
+      {% else %}
+      <li><a href="/login">Log in</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-12 columns">
+      <h1>Welcome to Bit Clicker!</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-6 columns">
+    <div class="callout">
+        <p>This is a clicking game where you get to compete with other
+          users! <br> The objective of the game is simple:</p>
+        <ul>
+          <li>Click to get a bit</li>
+          <li>Purchase upgrades with the bits to earn even more bits</li>
+          <li>Try to make it to the top of the leaderboard with the most clicks!</li>
+        </ul>
+        {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}! Ready to click some bits?<br><br>
+          <a href="/game" class="button">Play!</a>
+        </p>
+        {% else %}
+        <p>You will need an account to play. If you don't have one, you can register,
+          it's easy! Once you registered or you already have an account, then you can
+          just log in and start playing! You can get started here:<br><br>
+          <a href="/register" class="button">Register</a>
+          <a href="/login" class="button">Login</a>
+        </p>
+        {% endif %}
+    </div>
+  </div>
+  <div class="large-6 columns">
+    <div class="callout">
+        <h3>Leader board</h3>
+        {% if score_list %}
+        <ol>
+          {% for stat in score_list %}
+          <li>{{ stat.the_user.username }} - {{ stat.score }} bits</li>
+          {% endfor %}
+        </ol>
+        {% else %}
+        <p>Well, it looks like no one has registered yet :(</p>
+        {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

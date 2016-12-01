@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} {{ page_name }} {% endblock %}
+
+{% block content %}
+<div class="top-bar">
+  <div class="top-bar-left">
+    <ul class="dropdown menu" data-dropdown-menu>
+      <li class="menu-text">Bit Clicker</li>
+    </ul>
+  </div>
+  <div class="top-bar-right">
+    <ul class="menu">
+      {% if user.is_authenticated %}
+      <li>Logged in as {{ user.username }}</li>
+      <li><a href="/logout">Log Out</a></li>
+      {% else %}
+      <li><a href="/login">Log in</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="small-3 small-centered columns">
+    <h2>Clickin' time! Be sure to save often!</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="small-3 small-centered columns">
+    <p id="bits">??? bits</p>
+  </div>
+</div>
+<div class="row">
+  <div class="small-3 small-centered columns">
+    <button type="button" class="button" onclick="addBits()">Bit</button>
+  </div>
+</div>
+<div class="row">
+  <div class="small-3 small-centered columns">
+    <p id="bitsPerClick">1 bit per click</p>
+    <button id="currentCost" type="button" class="button" onclick="purchaseUpgrade()">Double (Costs: 100 bits)</button>
+  </div>
+</div>
+<div class="row">
+  <div class="small-3 small-centered columns">
+    <button id="saveGame" type="button" class="button" onclick="saveGame()">Save</button>
+  </div>
+</div>
+<div class = "row">
+  <div class="small-6 small-centered columns">
+    <div class="callout">
+        <h3>Leader board</h3>
+        {% if score_list %}
+        <ol>
+          {% for stat in score_list %}
+          <li>{{ stat.the_user.username }} - {{ stat.score }} bits</li>
+          {% endfor %}
+        </ol>
+        {% else %}
+        <p>Well, it looks like no one has registered yet :(</p>
+        {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+  /* Increment the number of bits everytime the user clicks */
+  function addBits () {
+    numberOfBits += incrementCount;
+    document.getElementById("bits").innerHTML = numberOfBits + " bits";
+  }
+  /* Set up the game based off of the current user's saved data loaded from the database */
+  function loadGame () {
+    for (i = 0; i < upgrades; i++) {
+      incrementCount *= 2;
+      upgradeCost *= 2;
+    }
+    document.getElementById("bits").innerHTML = numberOfBits + " bits";
+    document.getElementById("bitsPerClick").innerHTML = incrementCount + " bits per click";
+    document.getElementById("currentCost").innerHTML = "Double (Costs: " + upgradeCost + " bits)";
+  }
+  /* When an upgrade has been purchased, subract the cost from the total number of
+   * bits and then increment the number of upgrades. The cost doubles every time
+   * an upgrade has been purchased
+   */
+  function purchaseUpgrade() {
+    if (numberOfBits < upgradeCost) {
+      window.alert("You don't have enough bits!");
+      return;
+    }
+    numberOfBits -= upgradeCost;
+    upgrades++;
+    incrementCount *= 2;
+    upgradeCost *= 2;
+    document.getElementById("bits").innerHTML = numberOfBits + " bits";
+    document.getElementById("bitsPerClick").innerHTML = incrementCount + " bits per click";
+    document.getElementById("currentCost").innerHTML = "Double (Costs: " + upgradeCost + " bits)";
+  }
+  function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+  }
+  function saveGame() {
+    $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+    });
+    $.ajax({
+      url : "save/",
+      type : "POST",
+      data : {score : numberOfBits, double_upgrades_owned : upgrades },
+
+      success : function(json) {
+        window.alert("Save successful!");
+      },
+      error : function(xhr, status ,err) {
+        console.error("save/", status, err.toString());
+      }
+    });
+  }
+  var numberOfBits = {{user.user_game_status.score}};
+  var incrementCount = 1;
+  var upgrades = {{user.user_game_status.double_upgrades_owned}};
+  var upgradeCost = 100;
+  var csrftoken = Cookies.get('csrftoken');
+  loadGame();
+</script>
+{% endblock %}

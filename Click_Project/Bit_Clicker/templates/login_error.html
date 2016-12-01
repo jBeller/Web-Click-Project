@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} {{ page_name }} {% endblock %}
+
+{% block content %}
+
+<div class="top-bar">
+  <div class="top-bar-left">
+    <ul class="dropdown menu" data-dropdown-menu>
+      <li class="menu-text">Bit Clicker</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Log in</h2>
+<p>Invalid username or password</p>
+<div class="row">
+  <div class="small-6 columns">
+    <form method="post" action="/login_error">
+      {% csrf_token %}
+      {{ form.errors }}
+      <label>
+        {{ form.username.label_tag }}
+        {{ form.username }}
+      </label>
+      <label>
+        {{ form.password.label_tag }}
+        {{ form.password }}
+      </label>
+      <input type="submit" class="button" value="Login">
+    </form>
+  </div>
+</div>
+
+{% endblock %}

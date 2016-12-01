@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} {{ page_name }} {% endblock %}
+
+{% block content %}
+
+<div class="top-bar">
+  <div class="top-bar-left">
+    <ul class="dropdown menu" data-dropdown-menu>
+      <li class="menu-text">Bit Clicker</li>
+    </ul>
+  </div>
+</div>
+
+<h2>Register Account</h2>
+<div class="row">
+  <div class="small-6 columns">
+    <form method="post" action="/register">
+      {% csrf_token %}
+      {{ form.errors }}
+      <label>
+        {{ form.username.label_tag }}
+        {{ form.username }}
+      </label>
+      <label>
+        {{ form.password1.label_tag }}
+        {{ form.password1 }}
+      </label>
+      <label>
+        {{ form.password2.label_tag }}
+        {{ form.password2 }}
+      </label>
+      <input type="submit" class="button" value="Register">
+    </form>
+    <h3>IMPORTANT: You should write down your password somewhere because you won't be able to reset it here!</h3>
+  </div>
+</div>
+
+{% endblock %}

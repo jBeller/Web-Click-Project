@@ -53,22 +53,16 @@
 <div class = "row">
   <div class="small-6 small-centered columns">
     <div class="callout">
-        <h3>Leader board</h3>
-        {% if score_list %}
-        <ol>
-          {% for stat in score_list %}
-          <li>{{ stat.the_user.username }} - {{ stat.score }} bits</li>
-          {% endfor %}
-        </ol>
-        {% else %}
-        <p>Well, it looks like no one has registered yet :(</p>
-        {% endif %}
+      <div id="LeaderBoard">
+        <p>Loading leaderboard...</p>
+      </div>
     </div>
   </div>
 </div>
 
 {% endblock %}
 {% block scripts %}
+<script type="text/babel" src="{% static 'js/live.js' %}"></script>
 <script>
   /* Increment the number of bits everytime the user clicks */
   function addBits () {
@@ -123,6 +117,7 @@
         window.alert("Save successful!");
       },
       error : function(xhr, status ,err) {
+        window.alert("Save failed.");
         console.error("save/", status, err.toString());
       }
     });

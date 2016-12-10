@@ -14,4 +14,6 @@ urlpatterns = [
     url(r'^logout/$', views.logout_view, name='logout_view'),
     url(r'^save$', views.save_view, name='save_view'),
     url(r'^save/$', views.save_view, name='save_view'),
+    url(r'^scores$', views.top_scores, name='top_scores'),
+    url(r'^scores/$', views.top_scores, name='top_scores'),
 ]

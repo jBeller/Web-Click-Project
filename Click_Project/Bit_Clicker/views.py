@@ -87,6 +87,19 @@ def save_view(request):
         current_user.user_game_status.score = request.POST['score']
         current_user.user_game_status.double_upgrades_owned = request.POST['double_upgrades_owned']
         current_user.user_game_status.save()
-        return JsonResponse({'foo':'bar'})
+        return JsonResponse({'save':'complete'})
     else:
         return HttpResponseRedirect('/')
+
+def top_scores(request):
+    if request.method == 'GET':
+        scores = user_game_status.objects.order_by('-score').all()[:10]
+        s_list = []
+        for s in scores:
+            s_dict = {}
+            s_dict["id"] = s.the_user.id
+            s_dict["user_name"] = s.the_user.username
+            s_dict["score"] = s.score
+            s_list += [s_dict]
+        return JsonResponse({'scores': s_list})
+    return HttpResponse("404")

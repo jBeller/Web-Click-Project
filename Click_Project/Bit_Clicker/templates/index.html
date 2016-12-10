@@ -37,8 +37,9 @@
         <ul>
           <li>Click to get a bit</li>
           <li>Purchase upgrades with the bits to earn even more bits</li>
-          <li>Try to make it to the top of the leaderboard with the most clicks!</li>
+          <li>Try to make it to the top of the leader board with the most clicks!</li>
         </ul>
+        <p>One more thing, the leader board updates automatically every 30 seconds!</p>
         {% if user.is_authenticated %}
         <p>Hello, {{ user.username }}! Ready to click some bits?<br><br>
           <a href="/game" class="button">Play!</a>
@@ -55,17 +56,13 @@
   </div>
   <div class="large-6 columns">
     <div class="callout">
-        <h3>Leader board</h3>
-        {% if score_list %}
-        <ol>
-          {% for stat in score_list %}
-          <li>{{ stat.the_user.username }} - {{ stat.score }} bits</li>
-          {% endfor %}
-        </ol>
-        {% else %}
-        <p>Well, it looks like no one has registered yet :(</p>
-        {% endif %}
+      <div id="LeaderBoard">
+        <p>Loading leaderboard...</p>
+      </div>
     </div>
   </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script type="text/babel" src="{% static 'js/live.js' %}"></script>
 {% endblock %}

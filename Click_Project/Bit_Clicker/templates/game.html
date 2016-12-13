@@ -8,6 +8,7 @@
   <div class="top-bar-left">
     <ul class="dropdown menu" data-dropdown-menu>
       <li class="menu-text">Bit Clicker</li>
+      <li><a href="/">Home</a></li>
     </ul>
   </div>
   <div class="top-bar-right">
@@ -26,7 +27,7 @@
 
 <div class="row">
   <div class="small-3 small-centered columns">
-    <h2>Clickin' time! Be sure to save often!</h2>
+    <h2>Clickin' time!</h2>
   </div>
 </div>
 <div class="row">
@@ -64,6 +65,9 @@
 {% block scripts %}
 <script type="text/babel" src="{% static 'js/live.js' %}"></script>
 <script>
+  window.onbeforeunload = function(){
+    return 'Are you sure you want to leave? Unsaved data will be lost!';
+  };
   /* Increment the number of bits everytime the user clicks */
   function addBits () {
     numberOfBits += incrementCount;
@@ -96,6 +100,9 @@
     document.getElementById("bitsPerClick").innerHTML = incrementCount + " bits per click";
     document.getElementById("currentCost").innerHTML = "Double (Costs: " + upgradeCost + " bits)";
   }
+  /*
+   * Copied from the Django documentation for using ajax.
+   */
   function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));

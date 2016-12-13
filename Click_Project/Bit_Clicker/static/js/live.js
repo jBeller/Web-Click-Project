@@ -27,7 +27,7 @@ var ScoreList = React.createClass({
 
     return(
       <div className="scoreList">
-      <h3>Leader board</h3>
+      <h3>Leader Board</h3>
         {ScoreNodes}
       </div>
     );
@@ -64,4 +64,5 @@ var LeaderBoard = React.createClass({
     );
   },
 });
+/* Update leaderboard every 30 seconds */
 ReactDOM.render(<LeaderBoard url="/scores" pollInterval={30000}/>, document.getElementById('LeaderBoard'));

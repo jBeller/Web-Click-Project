@@ -33,6 +33,8 @@ def register(request):
             login(request, user)
             return HttpResponseRedirect('/')
     else:
+        if request.user.is_authenticated:
+            return HttpResponseRedirect('/')
         form = RegisterForm()
 
     context = {
@@ -58,6 +60,8 @@ def login_view(request):
                 }
                 return render(request, 'login_error.html', context)
     else:
+        if request.user.is_authenticated:
+            return HttpResponseRedirect('/')
         form = LoginForm()
 
     context = {

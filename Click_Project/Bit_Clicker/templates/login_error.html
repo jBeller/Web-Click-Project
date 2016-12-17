@@ -18,7 +18,7 @@
 <p>Invalid username or password</p>
 <div class="row">
   <div class="small-6 columns">
-    <form method="post" action="/login_error">
+    <form method="post" action="/login">
       {% csrf_token %}
       {{ form.errors }}
       <label>
